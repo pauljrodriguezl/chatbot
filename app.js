@@ -357,6 +357,11 @@ function sendToBot(senderID, currentUser, message) {
           const parameters = result.parameters;
           console.log('action: ', action);
           console.log('parameters: ', parameters);
+          if (parameters){
+            switch(parameters){
+              getMeme(senderID, parameters);
+            }
+          }
           if (action) {
             switch (action) {
               case 'account.balance':
@@ -386,6 +391,12 @@ function sendToBot(senderID, currentUser, message) {
   });
 
   request.end();
+}
+
+function getMeme(senderID, parameter){
+ if (senderID){
+  console.log('getMeme: ', parameter)
+ }
 }
 
 function getAccountBalance(senderID, accountType) {
