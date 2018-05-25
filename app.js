@@ -54,6 +54,12 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
   process.exit(1);
 }
 
+app.get('/',function(req,res){
+
+  res.send('Superbot');
+
+});
+
 app.get('/privacy',function(req,res){
 
   res.sendFile(path.join(__dirname+'/privacy.html'));
