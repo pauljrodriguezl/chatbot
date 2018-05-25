@@ -364,19 +364,6 @@ function sendToBot(senderID, currentUser, message) {
           if (parameters && parameters.meme){
               getMeme(senderID, parameters.meme);
           }
-          if (action) {
-            switch (action) {
-              case 'account.balance':
-                getAccountBalance(senderID, parameters.account_type);
-                break;
-              case 'account.movement':
-                getAccountMovement(senderID, parameters.account_type);
-                break;
-              default:
-                console.log('unknown action...');
-                break;
-            }
-          }
         }
       }
       else {
@@ -446,18 +433,6 @@ function getMeme(senderID, parameter){
     }
   });
  }
-}
-
-function getAccountBalance(senderID, accountType) {
-  if (senderID && accountType) {
-    console.log('get balance for: ', accountType);
-  }
-}
-
-function getAccountMovement(senderID, accountType) {
-  if (senderID && accountType) {
-    console.log('get balance for: ', accountType);
-  }
 }
 
 function showMenu(senderID) {
