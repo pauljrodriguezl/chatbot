@@ -253,8 +253,6 @@ function getUsername(senderId) {
         };
 
         sendTextMessage(senderId, "Hola " + firstName + "!");
-        sendTextMessage(senderId, "Soy un bot, que te ayuda a conseguir memes animado de giphy" );
-        sendTextMessage(senderId, "Para conseguir un giphy, debes ingresar primero la palabra giphy");
       }
       else {
         console.error("Failed calling GET userId API", response.statusCode, response.statusMessage, body.error);
