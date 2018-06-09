@@ -265,8 +265,6 @@ function getUsername(senderId) {
   else if (currentUser) {
     console.log('current user not NULL');
     sendTextMessage(senderId, "Hola " + currentUser.firstName + "!");
-    sendTextMessage(senderId, "Soy un bot, que te ayuda a conseguir memes animado de giphy" );
-        sendTextMessage(senderId, "Para conseguir un giphy, debes ingresar primero la palabra giphy");
   }
 }
 
