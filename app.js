@@ -435,6 +435,62 @@ function getMeme(senderID, parameter){
  }
 }
 
+function showMenu(senderID) {
+  var messageData = {
+    recipient: {
+      id: senderID
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "Menú 🤖",
+          buttons:[{
+            type: "postback",
+            title: "Chuck Norris 💀",
+            payload: "CHUCK_NORRIS"
+          },]
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+  messageData = {
+    recipient: {
+      id: senderID
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "Menú Principal 🤖",
+          buttons:[{
+            type: "web_url",
+            url: "http://idevco.de",
+            title: "Mi programador! 🕺"
+          }]
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+}
+
+function setPersistentMenu() {
+  var messageData = {
+    setting_type: "call_to_actions",
+    thread_state: "existing_thread",
+    call_to_actions: [{
+      type: "postback",
+      title: "Menu Name",
+      payload: "PAYLOAD_HELP"
+    }]
+  };
+  callThreadAPI(messageData);
+}
+
 /*
  * Delivery Confirmation Event
  *
