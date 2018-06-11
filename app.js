@@ -551,11 +551,11 @@ function receivedPostback(event) {
           type: "template",
           payload: {
             template_type: "button",
-            text: "Quick Menu",
+            text: "Menu Rapido",
             buttons:[{
               type: "postback",
-              title: "Sample Title",
-              payload: "SAMPLE_PAYLOAD"
+              title: "Iniciar conversación",
+              payload: "START_CON"
             },
             {
               type: "web_url",
