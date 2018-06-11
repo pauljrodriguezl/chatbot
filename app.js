@@ -484,7 +484,7 @@ function setPersistentMenu() {
     thread_state: "existing_thread",
     call_to_actions: [{
       type: "postback",
-      title: "Menu Name",
+      title: "Menu Rapido",
       payload: "PAYLOAD_HELP"
     }]
   };
