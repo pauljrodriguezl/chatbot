@@ -445,11 +445,11 @@ function showMenu(senderID) {
         type: "template",
         payload: {
           template_type: "button",
-          text: "Menú 🤖",
+          text: "Menú",
           buttons:[{
             type: "postback",
-            title: "Chuck Norris 💀",
-            payload: "CHUCK_NORRIS"
+            title: "Conseguir un giphy",
+            payload: "ING_MEME"
           },]
         }
       }
@@ -465,11 +465,11 @@ function showMenu(senderID) {
         type: "template",
         payload: {
           template_type: "button",
-          text: "Menú Principal 🤖",
+          text: "Menú Principal ",
           buttons:[{
             type: "web_url",
-            url: "http://idevco.de",
-            title: "Mi programador! 🕺"
+            url: "",
+            title: ""
           }]
         }
       }
@@ -559,8 +559,8 @@ function receivedPostback(event) {
             },
             {
               type: "web_url",
-              url: "https://devsu.com",
-              title: "DEVSU"
+              url: "https://giphy.com/",
+              title: "giphy"
             },]
           }
         }
