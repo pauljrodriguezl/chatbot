@@ -532,50 +532,6 @@ function receivedPostback(event) {
 
   // The 'payload' param is a developer-defined field which is set in a postback
   // button for Structured Messages.
-  var payload = event.postback.payload;
-
-  console.log("Received postback for user %d and page %d with payload '%s' " +
-    "at %d", senderID, recipientID, payload, timeOfPostback);
-
-  if (payload == "FACEBOOK_WELCOME") {
-    sendTextMessage(senderID, "Bienvenido, humano! Haz click en 'menu' para ver una lista de mis abilidades 🤖");
-  }
-  else if (payload == "PAYLOAD_HELP") {
-    //console.log("PAYLOAD_HELP activated!");
-    var messageData = {
-      recipient: {
-        id: senderID
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: {
-            template_type: "button",
-            text: "Quick Menu",
-            buttons:[{
-              type: "postback",
-              title: "Sample Title",
-              payload: "SAMPLE_PAYLOAD"
-            },
-            {
-              type: "web_url",
-              url: "https://devsu.com",
-              title: "DEVSU"
-            },]
-          }
-        }
-      }
-    };
-    callSendAPI(messageData);
-  }
-  else if (payload == "SAMPLE_PAYLOAD") {
-    console.log("sample payload");
-  }
-  else {
-    console.log("unknown payload...");
-    console.log(payload);
-    showMenu(senderID);
-  }
 
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
