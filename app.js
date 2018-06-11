@@ -262,7 +262,7 @@ function getUsername(senderId) {
   }
   else if (currentUser) {
     console.log('current user not NULL');
-    sendTextMessage(senderId, "Hola " + currentUser.firstName + "!"+ " Soy Superbot y te voy ayudar encontrando gif animados de cualquier tema que necesites, ingresa la palabra giphy a continuación");
+    sendTextMessage(senderId, "Hola " + currentUser.firstName + "!"+ " Soy Superbot y te voy ayudar encontrando gif's animados de cualquier tema que necesites, ingresa la palabra giphy a continuación");
   }
 }
 
