@@ -73,18 +73,18 @@ app.get('/privacy',function(req,res){
 var bot = apiai(AI_API_TOKEN);
 
 const Telegraf = require('telegraf');
-const telegrambot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
-telegrambot.start((ctx) => ctx.reply('Bienvenido!'));
-telegrambot.hears('hola', (ctx) => ctx.reply('Hola humano!'));
-telegrambot.on('text', (ctx) => {
+const telegramBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+telegramBot.start((ctx) => ctx.reply('Bienvenido!'));
+telegramBot.hears('hola', (ctx) => ctx.reply('Hola humano!'));
+telegramBot.on('text', (ctx) => {
   console.log('on text: ', ctx.message.text);
   sendTelegramToBot(ctx, ctx.message.text);
 });
-telegrambot.startPolling();
+telegramBot.startPolling();
 
-function sendTelegramTobot(ctx, message) {
+function sendTelegramToBot(ctx, message) {
   const request = bot.textRequest(message, {
-    sessionId: 'telegrambot',
+    sessionId: 'telegramBot',
   });
 
   request.on('response', function(response) {
