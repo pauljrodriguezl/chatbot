@@ -72,6 +72,73 @@ app.get('/privacy',function(req,res){
 
 var bot = apiai(AI_API_TOKEN);
 
+const Telegraf = require('telegraf');
+const telegramBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+telegramBot.start((ctx) => ctx.reply('Bienvenido!'));
+telegramBot.hears('hola', (ctx) => ctx.reply('Hola humano!'));
+telegramBot.on('text', (ctx) => {
+  console.log('on text: ', ctx.message.text);
+  sendTelegramToBot(ctx, ctx.message.text);
+});
+telegramBot.startPolling();
+
+function sendTelegramToBot(ctx, message) {
+  const request = bot.textRequest(message, {
+    sessionId: 'telegramBot',
+  });
+
+  request.on('response', function(response) {
+    if (response) {
+      console.log(response);
+      const result = response.result;
+      if (result) {
+        const fulfillment = result.fulfillment;
+        if (fulfillment && fulfillment.speech && fulfillment.speech.length > 0) {
+          ctx.reply(fulfillment.speech);
+        }
+        else {
+          const action = result.action;
+          const parameters = result.parameters;
+          console.log('action: ', action);
+          console.log('parameters: ', parameters);
+          if (parameters && parameters.meme) {
+            getTelegramMeme(ctx, parameters.meme);
+          }
+        }
+      }
+    }
+  });
+
+  request.on('error', function(error) {
+    console.log(error);
+  });
+
+  request.end();
+}
+
+function getTelegramMeme(ctx, parameter) {
+  if (ctx) {
+    console.log('getMeme: ', parameter);
+    const value = encodeURI(parameter);
+  request({
+    uri: 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_KEY + '&limit=50&rating=pg&q=' + value,
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var parsed = JSON.parse(body);
+      var i = Math.floor(Math.random() * 10);
+      var meme = parsed.data[i];
+      if (meme && meme.images && meme.images.fixed_width) {
+        var giphy = meme.images.fixed_width;
+        var giphy = meme.images.fixed_width;
+        ctx.replyWithDocument(giphy.url);
+      }
+    } else {
+      console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
+    }
+  });
+  }
+}
+
 /*
  * Use your own validation token. Check that the token used in the Webhook
  * setup is the same token used here.
