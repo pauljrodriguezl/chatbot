@@ -616,7 +616,6 @@ function receivedPostback(event) {
   else {
     console.log("unknown payload...");
     console.log(payload);
-    showMenu(senderID);
   }
 
   // When a postback is called, we'll send a message back to the sender to
