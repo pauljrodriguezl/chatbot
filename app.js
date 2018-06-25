@@ -49,10 +49,18 @@ const AI_API_TOKEN = (process.env.APIAI_TOKEN) ?
   (process.env.APIAI_TOKEN) :
   config.get('aiToken');
 
+  const GIPHY_KEY = (process.env.GIPHY_KEY) ?
+  (process.env.GIPHY_KEY) :
+  config.get('giphyKey');
+
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
   console.error("Missing config values");
   process.exit(1);
 }
+
+app.get('/', function(req, res) {
+  res.send('SuperBot');
+});
 
 app.get('/privacy',function(req,res){
 
@@ -61,6 +69,73 @@ app.get('/privacy',function(req,res){
 });
 
 var bot = apiai(AI_API_TOKEN);
+
+const Telegraf = require('telegraf');
+const telegramBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+telegramBot.start((ctx) => ctx.reply('Bienvenido!'));
+telegramBot.hears('hola', (ctx) => ctx.reply('Hola humano!'));
+telegramBot.on('text', (ctx) => {
+  console.log('on text: ', ctx.message.text);
+  sendTelegramToBot(ctx, ctx.message.text);
+});
+telegramBot.startPolling();
+
+function sendTelegramToBot(ctx, message) {
+  const request = bot.textRequest(message, {
+    sessionId: 'telegramBot',
+  });
+
+  request.on('response', function(response) {
+    if (response) {
+      console.log(response);
+      const result = response.result;
+      if (result) {
+        const fulfillment = result.fulfillment;
+        if (fulfillment && fulfillment.speech && fulfillment.speech.length > 0) {
+          ctx.reply(fulfillment.speech);
+        }
+        else {
+          const action = result.action;
+          const parameters = result.parameters;
+          console.log('action: ', action);
+          console.log('parameters: ', parameters);
+          if (parameters && parameters.meme) {
+            getTelegramMeme(ctx, parameters.meme);
+          }
+        }
+      }
+    }
+  });
+
+  request.on('error', function(error) {
+    console.log(error);
+  });
+
+  request.end();
+}
+
+function getTelegramMeme(ctx, parameter) {
+  if (ctx) {
+    console.log('getMeme: ', parameter);
+    const value = encodeURI(parameter);
+  request({
+    uri: 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_KEY + '&limit=50&rating=pg&q=' + value,
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var parsed = JSON.parse(body);
+      var i = Math.floor(Math.random() * 10);
+      var meme = parsed.data[i];
+      if (meme && meme.images && meme.images.fixed_width) {
+        var giphy = meme.images.fixed_width;
+        var giphy = meme.images.fixed_width;
+        ctx.replyWithDocument(giphy.url);
+      }
+    } else {
+      console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
+    }
+  });
+  }
+}
 
 /*
  * Use your own validation token. Check that the token used in the Webhook
@@ -351,18 +426,8 @@ function sendToBot(senderID, currentUser, message) {
           const parameters = result.parameters;
           console.log('action: ', action);
           console.log('parameters: ', parameters);
-          if (action) {
-            switch (action) {
-              case 'account.balance':
-                getAccountBalance(senderID, parameters.account_type);
-                break;
-              case 'account.movement':
-                getAccountMovement(senderID, parameters.account_type);
-                break;
-              default:
-                console.log('unknown action...');
-                break;
-            }
+          if (parameters && parameters.meme) {
+            getMeme(senderID, parameters.meme);
           }
         }
       }
@@ -382,15 +447,56 @@ function sendToBot(senderID, currentUser, message) {
   request.end();
 }
 
-function getAccountBalance(senderID, accountType) {
-  if (senderID && accountType) {
-    console.log('get balance for: ', accountType);
-  }
-}
+function getMeme(senderID, parameter) {
+  if (senderID) {
+    console.log('getMeme: ', parameter);
+    const value = encodeURI(parameter);
+  request({
+    uri: 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_KEY + '&limit=50&rating=pg&q=' + value,
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var parsed = JSON.parse(body);
+      var i = Math.floor(Math.random() * 10);
+      var meme = parsed.data[i];
+      if (meme && meme.images && meme.images.fixed_width) {
+        var giphy = meme.images.fixed_width;
+        var giphy = meme.images.fixed_width;
+        request({
+              uri: 'https://graph.facebook.com/v2.6/me/messages',
+              qs: { access_token: PAGE_ACCESS_TOKEN },
+              method: 'POST',
+              json: {
+                recipient: {
+                  id: senderID
+                },
+                message: {
+                  attachment: {
+                    type: 'image',
+                    payload: {
+                      url: giphy.url
+                    }
+                  }
+                }
+              }
 
-function getAccountMovement(senderID, accountType) {
-  if (senderID && accountType) {
-    console.log('get balance for: ', accountType);
+            }, function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                var result = body.result;
+
+                if (result) {
+                  console.log(result);
+                } else {
+                  console.log(result);
+                }
+              } else {
+                console.error("Failed sending giphy", response.statusCode, response.statusMessage, body.error);
+              }
+            });
+      }
+    } else {
+      console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
+    }
+  });
   }
 }
 
