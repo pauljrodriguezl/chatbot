@@ -549,7 +549,7 @@ function setPersistentMenu() {
     thread_state: "existing_thread",
     call_to_actions: [{
       type: "postback",
-      title: "Menu Name",
+      title: "Ayuda",
       payload: "PAYLOAD_HELP"
     }]
   };
@@ -603,35 +603,12 @@ function receivedPostback(event) {
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
   if (payload == "FACEBOOK_WELCOME") {
-    sendTextMessage(senderID, "Bienvenido, humano! Haz click en 'menu' para ver una lista de mis abilidades 🤖");
+    sendTextMessage(senderID, "Bienvenido, humano! Haz click en 'ayuda' para ver una lista de mis abilidades 🤖");
   }
   else if (payload == "PAYLOAD_HELP") {
-    //console.log("PAYLOAD_HELP activated!");
-    var messageData = {
-      recipient: {
-        id: senderID
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: {
-            template_type: "button",
-            text: "Quick Menu",
-            buttons:[{
-              type: "postback",
-              title: "Sample Title",
-              payload: "SAMPLE_PAYLOAD"
-            },
-            {
-              type: "web_url",
-              url: "https://devsu.com",
-              title: "DEVSU"
-            },]
-          }
-        }
-      }
-    };
-    callSendAPI(messageData);
+    console.log("PAYLOAD_HELP activated!");
+    sendTextMessage(senderID, "Tipea 'giphy' para iniciar conversación");
+
   }
   else if (payload == "SAMPLE_PAYLOAD") {
     console.log("sample payload");
