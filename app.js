@@ -59,7 +59,7 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
 }
 
 app.get('/', function(req, res) {
-  res.send('SuperBot');
+  res.send('SuperBot1.2.3');
 });
 
 app.get('/privacy',function(req,res){
